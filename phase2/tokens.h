@@ -12,7 +12,14 @@
 
 enum {
     // single character operators
-    ASSIGN = '=', /* . . . */
+    ASSIGN = '=', PIPE = '|',
+    LESSTHAN = '<', GREATERTHAN = '>', 
+    ADD = '+', SUB = '-', MUL = '*', DIV = '/', MOD = '%',
+    BITWISEAND = '&', NOT = '!', LEFTPAREN = '(', RIGHTPAREN = ')',
+    LEFTBRACKET = '[', RIGHTBRACKET = ']', LEFTBRACE = '{', RIGHTBRACE = '}',
+    SEMICOLON = ';', COLON = ':', PERIOD = '.', COMMA = ',',
+
+    /* . . . */
 
     // keywords
     AUTO = 256, BREAK, CASE, CHAR, CONST, CONTINUE, DEFAULT, DO, DOUBLE,
@@ -21,8 +28,8 @@ enum {
     UNION, UNSIGNED, VOID, VOLATILE, WHILE,
 
     // two character operators, ID, num, string, done
-    
-    Done = 0
+    OR, AND, EQUAL, NOTEQUAL, LESSTHANEQUAL, GREATERTHANEQUAL, 
+    INCREMENT, DECREMENT, ARROW, ID, NUM, STRING, CHARACTER, ERROR, Done = 0
 };
 
 # endif /* TOKENS_H */
