@@ -4,7 +4,7 @@ int printf();
 
 int main(void)
 {
-    long i, n, sum;
+    int i, n, sum;
 
     i = 0;
     sum = 0;
