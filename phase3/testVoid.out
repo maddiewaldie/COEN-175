@@ -1,0 +1,13 @@
+open scope
+open scope
+f: (285,0,FUNCTION)
+close scope
+x: (285,0,SCALAR)
+open scope
+g: (285,0,FUNCTION)
+y: (0,0,SCALAR)
+close scope
+h: (285,1,FUNCTION)
+a: (285,0,ARRAY)
+b: (285,1,ARRAY)
+close scope

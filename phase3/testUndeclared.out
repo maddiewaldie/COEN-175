@@ -1,0 +1,25 @@
+open scope
+open scope
+f: (272,0,FUNCTION)
+x: (272,0,SCALAR)
+close scope
+open scope
+g: (272,0,FUNCTION)
+x: (272,0,SCALAR)
+y: (272,0,SCALAR)
+z: (272,0,SCALAR)
+open scope
+w: (272,0,SCALAR)
+add
+add
+close scope
+close scope
+x: (272,0,SCALAR)
+open scope
+h: (259,2,FUNCTION)
+y: (272,0,SCALAR)
+z: (272,0,SCALAR)
+add
+add
+close scope
+close scope
