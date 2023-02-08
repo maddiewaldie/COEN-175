@@ -38,10 +38,10 @@ bool Type::operator==(const Type &that) const {
         return _length == that._length;
     }
     assert(_declarator == FUNCTION);
-    if (!_parameters || !that._parameters) { // if parameters are undefined
+    if (!_parameters || !that._parameters) {
         return true;
     }
-    return *_parameters == *that._parameters; // check if all parameters in vectors are the same
+    return *_parameters == *that._parameters;
 }
 
 std::ostream &operator <<(std::ostream &ostr, const Type &type) {

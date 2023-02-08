@@ -708,9 +708,10 @@ static Parameters *parameters()
 
     if (lookahead == VOID) {
 	match(VOID, __LINE__);
+	typespec = VOID;
 
 	if (lookahead == ')') {
-	    return nullptr;
+	    return parameters;
 	}
 
     } else
@@ -747,12 +748,10 @@ static void globalDeclarator(int typespec)
 {
     unsigned indirection = pointers();
     string name = identifier();
-	Parameters *params = new Parameters;
 
     if (lookahead == '(') {
 	match('(', __LINE__);
-	params = parameters();
-    Type type = Type(typespec, indirection, params);
+    Type type = Type(typespec, indirection, nullptr);
 	declareFunction(name, type);
 	match(')', __LINE__);
 
@@ -808,7 +807,6 @@ static void globalOrFunction()
     int typespec = specifier();
     unsigned indirection = pointers();
     string name = identifier();
-	Parameters *params = new Parameters;
 
     if (lookahead == '[') {
 	match('[', __LINE__);
@@ -820,17 +818,17 @@ static void globalOrFunction()
 
     } else if (lookahead == '(') {
 	match('(', __LINE__);
-	Type type = Type(typespec, indirection, params);
 
 	if (lookahead == ')') {
-	    match(')', __LINE__);
+		Type type = Type(typespec, indirection, nullptr);
 		declareFunction(name, type);
+		match(')', __LINE__);
 	    remainingDeclarators(typespec);
 
 	} else {
 		openScope();
+		Type type = Type(typespec, indirection, parameters());
 		defineFunction(name, type);
-	    parameters();
 	    match(')', __LINE__);
 	    match('{', __LINE__);
 	    declarations();

@@ -7,20 +7,20 @@
 typedef std::vector<class Type> Parameters;
 
 class Type {
-    int _specifier;             // INT, CHAR, etc.
-    unsigned _indirection;      // Number of pointers
+    int _specifier;
+    unsigned _indirection;
     enum {
         ARRAY, ERROR, FUNCTION, SCALAR
-    } _declarator;              // Name
+    } _declarator;
 
-    unsigned long _length;      // Only valid for arrays
-    Parameters *_parameters;    // Only valid for functions
+    unsigned long _length;
+    Parameters *_parameters;
 
 public:
-    Type(int specifier, unsigned indirection = 0);                      // Scalar
-    Type(int specifier, unsigned indirection, unsigned long length);    // Array
-    Type(int specifier, unsigned indirection, Parameters *parameters);  // Function
-    Type(); // Error
+    Type(int specifier, unsigned indirection = 0);
+    Type(int specifier, unsigned indirection, unsigned long length);
+    Type(int specifier, unsigned indirection, Parameters *parameters);
+    Type();
 
     bool isArray() const { return _declarator == ARRAY; }
 

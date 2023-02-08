@@ -29,7 +29,7 @@ echo "Extracting submission ..."
 tar -C $WORKDIR -xf $1 || die
 
 echo "Compiling project ..."
-(cd $WORKDIR && cd phase2 && rm -f *.o scc core && make) || die
+(cd $WORKDIR && cd phase3 && rm -f *.o scc core && make) || die
 
 echo "Extracting examples ..."
 tar -C $WORKDIR -xf $2 || die
@@ -37,9 +37,9 @@ tar -C $WORKDIR -xf $2 || die
 echo "Running examples ..."
 (cd $WORKDIR/examples && for FILE in *.c; do
     echo -n "$FILE ... "
-    (ulimit -t 1; ../phase2/scc) < $FILE 2>/dev/null |
-	cmp -s - `basename $FILE .c`.out 2>/dev/null && echo ok || echo failed
+    (ulimit -t 1; ../phase3/scc) < $FILE 2>&1 >/dev/null |
+	cmp -s - `basename $FILE .c`.err 2>/dev/null && echo ok || echo failed
 done)
 
-#rm -rf $WORKDIR
+rm -rf $WORKDIR
 exit 0
