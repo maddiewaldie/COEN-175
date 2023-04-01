@@ -47,17 +47,20 @@ Type checkGreaterThanEqualTo(const Type &left, const Type &right);
 Type checkEquals(const Type &left, const Type &right);
 Type checkNotEquals(const Type &left, const Type &right);
 
-Type checkPostfixExpression(const Type &left, const Type &right);
-
-Type checkAddress(const Type &right, const bool &lvalue);
-Type checkDereference(const Type &right);
-Type checkSizeof(const Type &right);
-
+// objective 3.5
 Type checkAdd(const Type &left, const Type &right);
 Type checkSub(const Type &left, const Type &right);
 
+// objective 3.6
+Type checkDereference(const Type &right);
+Type checkPostfixExpression(const Type &left, const Type &right);Type checkPostfixExpression(const Type &left, const Type &right);
+Type checkAddress(const Type &right, const bool &lvalue);
+
+// objecyive 3.7
+Type checkSizeof(const Type &right);
+
+Type checkFunction(const Type &left, Parameters *params);
 Type checkReturn(const Type &left, const Type &enclosing);
 Type checkAssignment(const Type &left, const Type &right, bool &lvalue);
-Type checkFunction(const Type &left, Parameters *params);
 
 # endif /* CHECKER_H */

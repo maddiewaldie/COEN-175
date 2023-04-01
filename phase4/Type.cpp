@@ -25,6 +25,8 @@
 
 using namespace std;
 
+static Type voidPtr(VOID, 1);
+
 
 /*
  * Function:	Type::Type (constructor)
@@ -218,8 +220,14 @@ Type Type::promote() const {
     return *this;
 }
 
-bool isCompatibleWith(const Type &that) const {
-    
+bool Type::isCompatibleWith(const Type &that) const {
+    if (isPointer() && that == voidPtr) {
+        return true;
+    }
+    if (that.isPointer() && *this == voidPtr) {
+        return true;
+    }
+    return isPredicate() && promote() == that.promote();
 }
 
 

@@ -315,3 +315,167 @@ Type checkGreaterThanEqualTo(const Type &left, const Type &right) {
 }
 
 // objective 3.4
+Type checkEquals(const Type &left, const Type &right) {
+    if (left == error || right == error) {
+        return error;
+    }
+    if (left.isCompatibleWith(right)) {
+        return integer;
+    }
+    report(error4, "==");
+    return error;
+}
+
+Type checkNotEquals(const Type &left, const Type &right) {
+    if (left == error || right == error) {
+        return error;
+    }
+    if (left.isCompatibleWith(right)) {
+        return LONG;
+    }
+    report(error4, "!=");
+    return error;
+}
+
+// objective 3.5
+Type checkAdd(const Type &left, const Type &right) {
+    if (left == error || right == error) {
+        return error;
+    }
+    Type promoteLeft = left.promote();
+    Type promoteRight = right.promote();
+    if (promoteLeft.isNumeric() && promoteRight.isNumeric()) {
+        return LONG;
+    }
+    else if (promoteLeft.isPointer() && promoteLeft != Type(VOID, 1) && promoteRight.isNumeric()) {
+        return Type(promoteLeft.specifier(), promoteLeft.indirection());
+    }
+    else if (promoteLeft.isNumeric() && promoteRight.isPointer() && promoteRight != Type(VOID, 1)) {
+        return Type(promoteRight.specifier(), promoteRight.indirection());
+    }
+    report(error4, "+");
+    return error;
+}
+
+Type checkSub(const Type &left, const Type &right) {
+    if (left == error || right == error) {
+        return error;
+    }
+    Type promoteLeft = left.promote();
+    Type promoteRight = right.promote();
+    if (promoteLeft.isNumeric() && promoteRight.isNumeric()) {
+        return LONG;
+    }
+    else if (promoteLeft.isPointer() && promoteLeft.specifier() != VOID && promoteRight.isNumeric()) {
+        return Type(promoteLeft.specifier(), promoteLeft.indirection());
+    }
+    else if (promoteLeft.isPointer() && promoteRight.isPointer() && (promoteLeft.specifier() != VOID) && (promoteLeft.specifier() == promoteRight.specifier())) {
+        return Type(promoteRight.specifier(), promoteRight.indirection());
+    }
+    report(error4, "-");
+    return error;
+}
+
+// objective 3.6
+Type checkDereference(const Type &right) {
+    if (right == error) {
+        return error;
+    }
+
+    Type promoteRight = right.promote();
+    
+    if (promoteRight.isPointer() && promoteRight.specifier() != VOID) {
+        return Type(promoteRight.specifier(), promoteRight.indirection()-1);
+    }
+
+    report(error5, "*");
+    return error;
+}
+
+Type checkPostfixExpression(const Type &left, const Type &right);Type checkPostfixExpression(const Type &left, const Type &right) {
+    if (left == error || right == error) {
+        return error;
+    }
+    Type promoteLeft = left.promote();
+    Type promoteRight = right.promote();
+    if (promoteLeft.isPointer() && promoteLeft != Type(VOID, 1) && promoteRight.isNumeric()) {
+        return Type(promoteLeft.specifier(), promoteLeft.indirection()-1);
+    }
+    report(error4, "[]");
+    return error;
+}
+
+Type checkAddress(const Type &right, const bool &lvalue) {
+    if (right == error) {
+        return error;
+    }
+    if (lvalue) {
+        return Type(right.specifier(), right.indirection()+1);
+    }
+    report(error3);
+    return error;
+}
+
+// objecyive 3.7
+Type checkSizeof(const Type &right) {
+    if (right == error) {
+        return error;
+    }
+    if (right.isPredicate()) {
+        return integer;
+    }
+    report(error5, "sizeof");
+    return error;
+}
+
+Type checkFunction(const Type &left, Parameters *params) {
+    if (left == error) {
+        return error;
+    }
+    if (!left.isFunction()) {
+        report(error6);
+        return error;
+    }
+    if (left.parameters() == nullptr) {
+        return Type(left.specifier(), left.indirection());
+    }
+    if (left.parameters()->size() != params->size()) {
+        report(error7);
+        return error;
+    }
+    for (unsigned i = 0; i < params->size(); i++) {
+        Type param1 = (*left.parameters())[i].promote();
+        Type param2 = (*params)[i].promote();
+        if (!param1.isCompatibleWith(param2)) {
+            report(error7);
+            return error;
+        }
+    }
+    return Type(left.specifier(), left.indirection());
+}
+
+Type checkReturn(const Type &left, const Type &enclosing) {
+    if (left == error || enclosing == error) {
+        return error;
+    }
+    if (left.isCompatibleWith(enclosing)) {
+        return left;
+    }
+    report(error1);
+    return error;
+}
+
+Type checkAssignment(const Type &left, const Type &right, bool &lvalue) {
+    if (left == error || right == error) {
+        return error;
+    }
+    else if (!lvalue) {
+        report(error3);
+        return error;
+    }
+    else if (left.isCompatibleWith(right)) {
+        return left;
+    }
+    report(error4, "=");
+    return error;
+}

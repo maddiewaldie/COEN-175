@@ -29,16 +29,20 @@ echo "Extracting submission ..."
 tar -C $WORKDIR -xf $1 || die
 
 echo "Compiling project ..."
-(cd $WORKDIR && cd phase3 && rm -f *.o scc core && make) || die
+(cd $WORKDIR && cd phase6 && rm -f *.o scc core && make) || die
 
 echo "Extracting examples ..."
 tar -C $WORKDIR -xf $2 || die
 
 echo "Running examples ..."
 (cd $WORKDIR/examples && for FILE in *.c; do
+    if echo $FILE | grep -v -- - >/dev/null; then
     echo -n "$FILE ... "
-    (ulimit -t 1; ../phase3/scc) < $FILE 2>&1 >/dev/null |
-	cmp -s - `basename $FILE .c`.err 2>/dev/null && echo ok || echo failed
+    BASE=`basename $FILE .c`
+    (ulimit -t 1; ../phase6/scc) < $FILE 2>/dev/null > $BASE.s &&
+	gcc $BASE.s && ./a.out < $BASE.in | 
+        cmp -s - `basename $FILE .c`.out 2>/dev/null && echo ok || echo failed
+    fi
 done)
 
 rm -rf $WORKDIR
